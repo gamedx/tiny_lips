@@ -1,10 +1,11 @@
 """
 License: Apache-2.0
-Author: Huadong Liao
-E-mail: naturomics.liao@gmail.com
+Code by Huadong Liao parameters adjusted for MIRACL-VC1 dataset by Oliver Ellison
+E-mail: aurelius@bu.edu
 """
 
 import tensorflow as tf
+import os 
 
 from config import cfg
 from utils import get_batch_data
@@ -13,11 +14,13 @@ from utils import reduce_sum
 from capsLayer import CapsLayer
 
 
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
 epsilon = 1e-9
 
 
 class CapsNet(object):
-    def __init__(self, is_training=True, height=28, width=28, channels=1, num_label=10):
+    def __init__(self, is_training=True, height=64, width=64, channels=1, num_label=10):  # changed from 28 to 64
         """
         Args:
             height: Integer, the height of inputs.
@@ -55,8 +58,8 @@ class CapsNet(object):
 
     def build_arch(self):
         with tf.variable_scope('Conv1_layer'):
-            # Conv1, return tensor with shape [batch_size, 20, 20, 256]
-            conv1 = tf.contrib.layers.conv2d(self.X, num_outputs=256,
+            # Conv1, return tensor with shape [batch_size, 10, 10, 64]
+            conv1 = tf.contrib.layers.conv2d(self.X, num_outputs=64,
                                              kernel_size=9, stride=1,
                                              padding='VALID')
 
@@ -144,7 +147,7 @@ class CapsNet(object):
         # The paper uses sum of squared error as reconstruction error, but we
         # have used reduce_mean in `# 2 The reconstruction loss` to calculate
         # mean squared error. In order to keep in line with the paper,the
-        # regularization scale should be 0.0005*784=0.392
+        # regularization scale should be 0.0005*16384=8.192
         self.total_loss = self.margin_loss + cfg.regularization_scale * self.reconstruction_err
 
     # Summary
