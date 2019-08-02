@@ -1,10 +1,11 @@
 """
-License: Apache-2.0
-Author: Huadong Liao
-E-mail: naturomics.liao@gmail.com
+License: Apache-2.0 
+Code by Oliver Aurelius Ellison and Michael Edward Cruz of Boston University (2019) 
+Adapted from code by Huadong Liao of Stanford University (2017)
+E-mail: aurelius@bu.edu, mecruz@bu.edu
 """
 
-import os
+
 import numpy as np
 import tensorflow as tf
 
@@ -13,7 +14,6 @@ from utils import reduce_sum
 from utils import softmax
 from utils import get_shape
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 epsilon = 1e-9
 
@@ -112,7 +112,7 @@ def routing(input, b_IJ, num_outputs=10, num_dims=16):
     # element-wise multiply [a*c, b] * [a*c, b], reduce_sum at axis=1 and
     # reshape to [a, c]
     input = tf.tile(input, [1, 1, num_dims * num_outputs, 1, 1])
-    # assert input.get_shape() == [cfg.batch_size, 1152, 120, 8, 1]
+    # assert input.get_shape() == [cfg.batch_size, 1152, 160, 8, 1]
 
     u_hat = reduce_sum(W * input, axis=3, keepdims=True)
     u_hat = tf.reshape(u_hat, shape=[-1, input_shape[1], num_outputs, num_dims, 1])

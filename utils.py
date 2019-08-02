@@ -1,3 +1,11 @@
+"""
+License: Apache-2.0 
+Code by Oliver Aurelius Ellison and Michael Edward Cruz of Boston University (2019) 
+Adapted from code by Huadong Liao of Stanford University (2017)
+E-mail: aurelius@bu.edu, mecruz@bu.edu
+"""
+
+
 import os
 import scipy
 import numpy as np
@@ -9,32 +17,32 @@ def load_mnist(batch_size, is_training=True):
     if is_training:
         fd = open(os.path.join(path, 'train-images-idx3-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
-        trainX = loaded[16:].reshape((11200, 120, 120, 1)).astype(np.float32)
+        trainX = loaded[16:].reshape((4200, 48, 48, 1)).astype(np.float32)
 
         fd = open(os.path.join(path, 'train-labels-idx1-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
-        trainY = loaded[8:].reshape((11200)).astype(np.int32)
+        trainY = loaded[8:].reshape((4200)).astype(np.int32)
 
-        trX = trainX[:10400] / 255.
-        trY = trainY[:10400]
+        trX = trainX[:3900] / 255.
+        trY = trainY[:3900]
 
-        valX = trainX[10400:, ] / 255.
-        valY = trainY[10400:]
+        valX = trainX[3900:, ] / 255.
+        valY = trainY[3900:]
 
-        num_tr_batch = 10400 // batch_size
-        num_val_batch = 800 // batch_size
+        num_tr_batch = 3900 // batch_size
+        num_val_batch = 300 // batch_size
 
         return trX, trY, num_tr_batch, valX, valY, num_val_batch
     else:
         fd = open(os.path.join(path, 't10k-images-idx3-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
-        teX = loaded[16:].reshape((800, 120, 120, 1)).astype(np.float)
+        teX = loaded[16:].reshape((300, 48, 48, 1)).astype(np.float32)
 
         fd = open(os.path.join(path, 't10k-labels-idx1-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
-        teY = loaded[8:].reshape((800)).astype(np.int32)
+        teY = loaded[8:].reshape((300)).astype(np.int32)
 
-        num_te_batch = 800 // batch_size
+        num_te_batch = 300 // batch_size
         return teX / 255., teY, num_te_batch
 
 
@@ -50,11 +58,11 @@ def get_batch_data(dataset, batch_size, num_threads):
         trX, trY, num_tr_batch, valX, valY, num_val_batch = load_mnist(batch_size, is_training=True)
 
     data_queues = tf.train.slice_input_producer([trX, trY])
-    X, Y = tf.train.shuffle_batch(data_queues, num_threads=2,
+    X, Y = tf.train.shuffle_batch(data_queues, num_threads=num_threads,
                                   batch_size=batch_size,
-                                  capacity=batch_size * 32,
-                                  min_after_dequeue=batch_size * 4,
-                                  allow_smaller_final_batch=True)
+                                  capacity=batch_size * 64,
+                                  min_after_dequeue=batch_size * 32,
+                                  allow_smaller_final_batch=False)
 
     return(X, Y)
 

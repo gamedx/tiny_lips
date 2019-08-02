@@ -1,3 +1,34 @@
+sudo fallocate -l 32G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon -s
+
+sudo sysctl vm.swappiness=1
+
+
+ctpu up --tpu-size=v3-8
+
+export STORAGE_BUCKET=gs://bucket-48
+
+gsutil cp -r gs://bucket-48 .
+
+
+cd bucket-48
+
+pip3 install scipy
+pip3 install tqdm
+
+python3 main.py 
+
+"""
+License: Apache-2.0 
+Code by Oliver Aurelius Ellison and Michael Edward Cruz of Boston University (2019) 
+Adapted from code by Huadong Liao of Stanford University (2017)
+E-mail: aurelius@bu.edu, mecruz@bu.edu
+"""
+
+
 # CapsNet-Tensorflow
 
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=plastic)](CONTRIBUTING.md)
