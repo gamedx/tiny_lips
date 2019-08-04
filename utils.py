@@ -1,15 +1,10 @@
-"""
-License: Apache-2.0 
-Code by Oliver Aurelius Ellison and Michael Edward Cruz of Boston University (2019) 
-Adapted from code by Huadong Liao of Stanford University (2017)
-E-mail: aurelius@bu.edu, mecruz@bu.edu
-"""
-
-
 import os
 import scipy
 import numpy as np
 import tensorflow as tf
+
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def load_mnist(batch_size, is_training=True):
@@ -17,14 +12,14 @@ def load_mnist(batch_size, is_training=True):
     if is_training:
         fd = open(os.path.join(path, 'train-images-idx3-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
-        trainX = loaded[16:].reshape((4200, 48, 48, 1)).astype(np.float32)
+        trainX = loaded[16:].reshape((4200, 64, 64, 1)).astype(np.float32)
 
         fd = open(os.path.join(path, 'train-labels-idx1-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
         trainY = loaded[8:].reshape((4200)).astype(np.int32)
 
         trX = trainX[:3900] / 255.
-        trY = trainY[:3900]
+        trY = trainY[:3900] 
 
         valX = trainX[3900:, ] / 255.
         valY = trainY[3900:]
@@ -36,7 +31,7 @@ def load_mnist(batch_size, is_training=True):
     else:
         fd = open(os.path.join(path, 't10k-images-idx3-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
-        teX = loaded[16:].reshape((300, 48, 48, 1)).astype(np.float32)
+        teX = loaded[16:].reshape((300, 64, 64, 1)).astype(np.float)
 
         fd = open(os.path.join(path, 't10k-labels-idx1-ubyte'))
         loaded = np.fromfile(file=fd, dtype=np.uint8)
@@ -56,7 +51,8 @@ def load_data(dataset, batch_size, is_training=True, one_hot=False):
 def get_batch_data(dataset, batch_size, num_threads):
     if dataset == 'mnist':
         trX, trY, num_tr_batch, valX, valY, num_val_batch = load_mnist(batch_size, is_training=True)
-
+    elif dataset == 'fashion-mnist':
+        trX, trY, num_tr_batch, valX, valY, num_val_batch = load_fashion_mnist(batch_size, is_training=True)
     data_queues = tf.train.slice_input_producer([trX, trY])
     X, Y = tf.train.shuffle_batch(data_queues, num_threads=num_threads,
                                   batch_size=batch_size,

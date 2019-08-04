@@ -1,11 +1,3 @@
-"""
-License: Apache-2.0 
-Code by Oliver Aurelius Ellison and Michael Edward Cruz of Boston University (2019) 
-Adapted from code by Huadong Liao of Stanford University (2017)
-E-mail: aurelius@bu.edu, mecruz@bu.edu
-"""
-
-
 import os
 import sys
 import numpy as np
@@ -16,7 +8,9 @@ from config import cfg
 from utils import load_data
 from capsNet import CapsNet
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 def save_to():
     if not os.path.exists(cfg.results):
@@ -63,7 +57,7 @@ def train(model, supervisor, num_label):
             if supervisor.should_stop():
                 print('supervisor stoped!')
                 break
-            for step in tqdm(range(num_tr_batch), total=num_tr_batch, ncols=10, leave=False, unit='b'):
+            for step in tqdm(range(num_tr_batch), total=num_tr_batch, ncols=70, leave=False, unit='b'):
                 start = step * cfg.batch_size
                 end = start + cfg.batch_size
                 global_step = epoch * num_tr_batch + step
@@ -107,7 +101,7 @@ def evaluation(model, supervisor, num_label):
         tf.logging.info('Model restored!')
 
         test_acc = 0
-        for i in tqdm(range(num_te_batch), total=num_te_batch, ncols=1000, leave=False, unit='b'):
+        for i in tqdm(range(num_te_batch), total=num_te_batch, ncols=70, leave=False, unit='b'):
             start = i * cfg.batch_size
             end = start + cfg.batch_size
             acc = sess.run(model.accuracy, {model.X: teX[start:end], model.labels: teY[start:end]})
@@ -124,7 +118,7 @@ def main(_):
     model = CapsNet()
     tf.logging.info(' Graph loaded')
 
-    sv = tf.train.Supervisor(graph=model.graph, logdir=cfg.logdir, save_model_secs=60)
+    sv = tf.train.Supervisor(graph=model.graph, logdir=cfg.logdir, save_model_secs=0)
 
     if cfg.is_training:
         tf.logging.info(' Start training...')

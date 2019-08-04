@@ -1,11 +1,10 @@
 """
-License: Apache-2.0 
-Code by Oliver Aurelius Ellison and Michael Edward Cruz of Boston University (2019) 
-Adapted from code by Huadong Liao of Stanford University (2017)
-E-mail: aurelius@bu.edu, mecruz@bu.edu
+License: Apache-2.0
+Author: Huadong Liao
+E-mail: naturomics.liao@gmail.com
 """
 
-
+import os
 import numpy as np
 import tensorflow as tf
 
@@ -13,6 +12,10 @@ from config import cfg
 from utils import reduce_sum
 from utils import softmax
 from utils import get_shape
+
+
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 epsilon = 1e-9
