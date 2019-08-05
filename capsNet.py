@@ -17,7 +17,7 @@ epsilon = 1e-9
 
 
 class CapsNet(object):
-    def __init__(self, is_training=True, height=64, width=64, channels=1, num_label=10):
+    def __init__(self, is_training=True, height=65, width=65, channels=1, num_label=10):
         """
         Args:
             height: Integer, the height of inputs.
@@ -43,7 +43,7 @@ class CapsNet(object):
 
                 # t_vars = tf.trainable_variables()
                 self.global_step = tf.Variable(0, name='global_step', trainable=False)
-                self.optimizer = tf.train.AdamOptimizer()
+                self.optimizer = tf.train.AdamOptimizer(0.0005) # original was 0.001
                 self.train_op = self.optimizer.minimize(self.total_loss, global_step=self.global_step)
             else:
                 self.X = tf.placeholder(tf.float32, shape=(cfg.batch_size, self.height, self.width, self.channels))
@@ -144,7 +144,6 @@ class CapsNet(object):
         # The paper uses sum of squared error as reconstruction error, but we
         # have used reduce_mean in `# 2 The reconstruction loss` to calculate
         # mean squared error. In order to keep in line with the paper,the
-        # regularization scale should be 0.0005*784=0.392
         self.total_loss = self.margin_loss + cfg.regularization_scale * self.reconstruction_err
 
     # Summary
