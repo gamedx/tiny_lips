@@ -8,8 +8,8 @@ from config import cfg
 from utils import load_data
 from capsNet import CapsNet
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+# os.environ["CUDA_VISIBLE_DEVICES"]="0"
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def save_to():
@@ -55,7 +55,7 @@ def train(model, supervisor, num_label):
         for epoch in range(cfg.epoch):
             print("Training for epoch %d/%d:" % (epoch, cfg.epoch))
             if supervisor.should_stop():
-                print('supervisor stoped!')
+                print('supervisor stopped!')
                 break
             for step in tqdm(range(num_tr_batch), total=num_tr_batch, ncols=70, leave=False, unit='b'):
                 start = step * cfg.batch_size
@@ -63,7 +63,8 @@ def train(model, supervisor, num_label):
                 global_step = epoch * num_tr_batch + step
 
                 if global_step % cfg.train_sum_freq == 0:
-                    _, loss, train_acc, summary_str = sess.run([model.train_op, model.total_loss, model.accuracy, model.train_summary])
+                    run_options = tf.RunOptions(report_tensor_allocations_upon_oom = True)
+                    _, loss, train_acc, summary_str = sess.run([model.train_op, model.total_loss, model.accuracy, model.train_summary], options=run_options)
                     assert not np.isnan(loss), 'Something wrong! loss is nan...'
                     supervisor.summary_writer.add_summary(summary_str, global_step)
 

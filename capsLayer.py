@@ -14,8 +14,8 @@ from utils import softmax
 from utils import get_shape
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+# os.environ["CUDA_VISIBLE_DEVICES"]="0"
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 epsilon = 1e-9
