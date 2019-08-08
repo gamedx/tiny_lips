@@ -4,6 +4,9 @@ import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
 
+# from tensorflow.contrib import tpu
+# from tensorflow.contrib.cluster_resolver import TPUClusterResolver
+
 from config import cfg
 from utils import load_data
 from capsNet import CapsNet
@@ -48,8 +51,10 @@ def train(model, supervisor, num_label):
     Y = valY[:num_val_batch * cfg.batch_size].reshape((-1, 1))
 
     fd_train_acc, fd_loss, fd_val_acc = save_to()
+
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
+
     with supervisor.managed_session(config=config) as sess:
         print("\nNote: all of results will be saved to directory: " + cfg.results)
         for epoch in range(cfg.epoch):
