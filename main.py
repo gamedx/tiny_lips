@@ -68,8 +68,8 @@ def train(model, supervisor, num_label):
                 global_step = epoch * num_tr_batch + step
 
                 if global_step % cfg.train_sum_freq == 0:
-                    run_options = tf.RunOptions(report_tensor_allocations_upon_oom = True)
-                    _, loss, train_acc, summary_str = sess.run([model.train_op, model.total_loss, model.accuracy, model.train_summary], options=run_options)
+                    # run_options = tf.RunOptions(report_tensor_allocations_upon_oom = True)
+                    _, loss, train_acc, summary_str = sess.run([model.train_op, model.total_loss, model.accuracy, model.train_summary])
                     assert not np.isnan(loss), 'Something wrong! loss is nan...'
                     supervisor.summary_writer.add_summary(summary_str, global_step)
 
