@@ -17,7 +17,7 @@ epsilon = 1e-9
 
 
 class CapsNet(object):
-    def __init__(self, is_training=True, height=65, width=65, channels=1, num_label=10):
+    def __init__(self, is_training=True, height=120, width=120, channels=1, num_label=10):
         """
         Args:
             height: Integer, the height of inputs.
@@ -43,7 +43,7 @@ class CapsNet(object):
 
                 # t_vars = tf.trainable_variables()
                 self.global_step = tf.Variable(0, name='global_step', trainable=False)
-                self.optimizer = tf.train.AdamOptimizer(0.0005) # original was 0.001
+                self.optimizer = tf.train.AdamOptimizer(0.0002) # original was 0.001
                 self.train_op = self.optimizer.minimize(self.total_loss, global_step=self.global_step)
             else:
                 self.X = tf.placeholder(tf.float32, shape=(cfg.batch_size, self.height, self.width, self.channels))

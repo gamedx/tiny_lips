@@ -13,8 +13,8 @@ flags.DEFINE_float('m_minus', 0.1, 'the parameter of m minus')
 flags.DEFINE_float('lambda_val', 0.5, 'down weight of the loss for absent digit classes')
 
 # for training
-flags.DEFINE_integer('batch_size', 40, 'batch size')
-flags.DEFINE_integer('epoch', 60, 'epoch')
+flags.DEFINE_integer('batch_size', 20, 'batch size')
+flags.DEFINE_integer('epoch', 40, 'epoch')
 flags.DEFINE_integer('iter_routing', 3, 'number of iterations in routing algorithm')
 flags.DEFINE_boolean('mask_with_y', True, 'use the true label to mask out target capsule or not')
 
@@ -31,7 +31,7 @@ flags.DEFINE_integer('num_threads', 8, 'number of threads of enqueueing examples
 flags.DEFINE_string('logdir', 'logdir', 'logs directory')
 flags.DEFINE_integer('train_sum_freq', 100, 'the frequency of saving train summary(step)')
 flags.DEFINE_integer('val_sum_freq', 100, 'the frequency of saving valuation summary(step)')
-flags.DEFINE_integer('save_freq', 6, 'the frequency of saving model(epoch)')
+flags.DEFINE_integer('save_freq', 4, 'the frequency of saving model(epoch)')
 flags.DEFINE_string('results', 'results', 'path for saving results')
 
 # flags.DEFINE_bool("use_tpu", True, "Use TPUs rather than plain CPUs")
